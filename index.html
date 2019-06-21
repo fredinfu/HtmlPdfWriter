@@ -5,19 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>HTML PDF</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="jspdf.min.js"></script>
     <script>
         function genPDF(){
             var doc = new jsPDF();
 
-            doc.text(20,20, 'Hello world!');
-            doc.addPage();
-            doc.text(20,20, 'Hello page 2!');
-            doc.save('HelloPDF.pdf');
+            var specialElementHandlers = {
+                '#dontWrite' : function(element,render){return true;}
+            };
+
+            doc.fromHTML($('#pdfDiv').get(0), 20, 20, {
+                'width' :500,
+                'elementHandlers' :specialElementHandlers
+            });
+            doc.save("DivPdf.pdf");
         }
     </script>
 </head>
 <body>
     <button onclick="genPDF()">Download PDF</button>
+    <div id="pdfDiv">
+        <div>Hello</div>
+        <div id="dontWrite">World</div>
+    </div>
 </body>
 </html>
