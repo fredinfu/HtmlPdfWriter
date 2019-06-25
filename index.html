@@ -14,6 +14,8 @@
     <script type="text/javascript" src="jspdf.min.js"></script>
     <script type="text/javascript" src="html2canvas.js"></script>
     <script>
+        
+
         function genPDF() {
             var HTML_Width = $("#pdfDiv").width();
             var HTML_Height = $("#pdfDiv").height();
@@ -26,7 +28,7 @@
             var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
 
 
-            html2canvas($("#pdfDiv")[0], { allowTaint: true }).then(function (canvas) {
+            html2canvas($("#pdfDiv")[0], { allowTaint: true, scale: 3 }).then(function (canvas) {
                 canvas.getContext('2d');
 
                 console.log(canvas.height + "  " + canvas.width);
@@ -42,7 +44,28 @@
                     pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height * i) + (top_left_margin * 4), canvas_image_width, canvas_image_height);
                 }
 
-                pdf.save("HTML-Document.pdf");
+                setTimeout(function () {
+                    //Save PDF Doc	
+                    $("#sample-pdf").show();
+                    pdf.save("HTML-Document.pdf");
+
+                    //Generate BLOB object
+                    var blob = pdf.output("blob");
+
+                    //Getting URL of blob object
+                    var blobURL = URL.createObjectURL(blob);
+
+                    //Showing PDF generated in iFrame element
+                    var iframe = document.getElementById('sample-pdf');
+                    iframe.src = blobURL;
+
+                    //Setting download link
+                    var downloadLink = document.getElementById('pdf-download-link');
+                    downloadLink.href = blobURL;
+
+                }, 100)
+
+                // pdf.save("HTML-Document.pdf");
             });
         };
 
@@ -56,15 +79,102 @@
         .center-text {
             text-align: center
         }
+
+        .medium-screen {
+            max-width: 610px;
+        }
+
+        .margin-sides {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
     </style>
 </head>
 
 <body>
-    <button id="downloadButton" onclick="genPDF()">Download PDF</button>
-    <div id="pdfDiv" style="max-width: 610px; " class="center-div">
-        <h2 class="center-text">Html PDF</h2>
+    <iframe frameBorder="0" id="sample-pdf" style="right:0; top:53px; bottom:0; height:700px; width:100%; display: none"></iframe>
+
+    <div class="medium-screen center-div center-text" style="margin-top: 10px">
+
+        <button type="button" class="btn btn-primary btn-sm " id="downloadButton" onclick="genPDF()">Download
+            PDF</button>
+    </div>
+    <div id="pdfDiv" class="center-div medium-screen margin-sides">
+        <h1 class="center-text">Generate PDF</h1>
+        <h3>
+            Subtitle
+            <small class="text-muted">small text</small>
+        </h3>
+        <p class="lead">Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Type</th>
+                    <th scope="col">Column heading</th>
+                    <th scope="col">Column heading</th>
+                    <th scope="col">Column heading</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-active">
+                    <th scope="row">Active</th>
+                    <td>Column content</td>
+                    <td>Column content</td>
+                    <td>Column content</td>
+                </tr>
+                <tr>
+                    <th scope="row">Default</th>
+                    <td>Column content</td>
+                    <td>Column content</td>
+                    <td>Column content</td>
+                </tr>
+                <tr class="table-primary">
+                    <th scope="row">Primary</th>
+                    <td>Column content</td>
+                    <td>Column content</td>
+                    <td>Column content</td>
+                </tr>
+                <tr class="table-secondary">
+                    <th scope="row">Secondary</th>
+                    <td>Column content</td>
+                    <td>Column content</td>
+                    <td>Column content</td>
+                </tr>
+                <tr class="table-success">
+                    <th scope="row">Success</th>
+                    <td>Column content</td>
+                    <td>Column content</td>
+                    <td>Column content</td>
+                </tr>
+                <tr class="table-danger">
+                    <th scope="row">Danger</th>
+                    <td>Column content</td>
+                    <td>Column content</td>
+                    <td>Column content</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <h3>
+            Subtitle
+            <small class="text-muted">small text</small>
+        </h3>
+
+        <div class="list-group">
+            <div class="list-group-item list-group-item-action">
+                Cras justo odio
+            </div>
+            <div class="list-group-item list-group-item-action">Dapibus ac facilisis in
+            </div>
+            <div class="list-group-item list-group-item-action">Morbi leo risus
+            </div>
+        </div>
+
         <div class="alert alert-success" role="alert">
-            <h4 class="alert-heading">Well done!</h4>
+            <h4 class="alert-heading">Everything up to date!</h4>
             <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit
                 longer so that you can see how spacing within an alert works with this kind of content.</p>
             <hr>
