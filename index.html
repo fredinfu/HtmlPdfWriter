@@ -1,34 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>HTML PDF</title>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script type="text/javascript" src="js/jquery-3.3.1.slim.min.js"></script>
+    <script type="text/javascript" src="js/popper.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script> -->
     <script type="text/javascript" src="jspdf.min.js"></script>
     <script type="text/javascript" src="html2canvas.js"></script>
     <script>
-        function genPDF(){
+        function genPDF() {
 
-            html2canvas(document.getElementById('pdfDiv')).then(function(canvas){
+            html2canvas(document.body).then(function (canvas) {
                 var img = canvas.toDataURL("image/png");
                 var doc = new jsPDF();
-                doc.addImage(img, 'JPEG', 20, 20);
+                // doc.addHTML($('#pdfDiv')[0], function () {
+                //     doc.save("html2canvas.pdf");
+                // });
+                doc.addImage(img, 'PNG', 5, 10);
                 doc.save("html2canvas.pdf");
             });
 
+            // html2canvas(document.body).then(function(canvas){
+            //     var doc = new jsPDF();
+
+            //     //doc.internal.scaleFactor = 30;
+
+            //     doc.save("html2canvas.pdf");
+            // });
+
+
         }
     </script>
+    <style>
+        .center-div{
+            float: none; margin: 0 auto;
+        }
+
+        .center-text{
+            text-align: center
+        }
+    </style>
 </head>
+
 <body>
-    <button onclick="genPDF()">Download PDF</button>
-    <div id="pdfDiv">
-        <h1>Html 2 Canvas 2 PDF</h1>
-        <div>SNES</div>
-        <div id="dontWrite">World</div>
-        <br><br>
-        <img src="snes.png" alt="" width="600" height="400">
+    <button id="downloadButton" onclick="genPDF()">Download PDF</button>
+    <div id="pdfDiv" style="max-width: 610px; ">
+        <h2 class="center-text">Html PDF</h2>
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">Well done!</h4>
+            <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit
+                longer so that you can see how spacing within an alert works with this kind of content.</p>
+            <hr>
+            <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+        </div>        
     </div>
 </body>
+
 </html>
